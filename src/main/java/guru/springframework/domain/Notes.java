@@ -15,6 +15,9 @@ public class Notes {
 
     @OneToOne
     private Recipe recipe;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private UnitOfMeasure uom;
     @Lob
     private String recipeNotes;
 
