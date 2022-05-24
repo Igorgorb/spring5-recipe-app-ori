@@ -16,8 +16,6 @@ public class Notes {
     @OneToOne
     private Recipe recipe;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    private UnitOfMeasure uom;
     @Lob
     private String recipeNotes;
 
@@ -45,11 +43,4 @@ public class Notes {
         this.recipeNotes = recipeNotes;
     }
 
-    public UnitOfMeasure getUom() {
-        return uom;
-    }
-
-    public void setUom(UnitOfMeasure uom) {
-        this.uom = uom;
-    }
 }
