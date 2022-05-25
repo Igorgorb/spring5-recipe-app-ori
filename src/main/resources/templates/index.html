@@ -48,7 +48,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="ingridient : ${recipe.ingridients}">
+                    <tr th:each="ingridient : ${recipe.ingredients}">
                         <!--        sumbol "?" - say Thymeleaf attention for may be Null in value -->
                         <td class="text-center" th:text="${ingridient?.amount}">1</td>
                         <td class="text-center" th:text="${ingridient?.uom?.description}">1</td>
