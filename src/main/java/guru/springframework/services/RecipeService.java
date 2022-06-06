@@ -9,5 +9,5 @@ import java.util.Set;
  * Date 22.05.2022
  */
 public interface RecipeService {
-    Set<Recipe> findAll();
+    Set<Recipe> getRecipes();
 }

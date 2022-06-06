@@ -4,6 +4,7 @@ import guru.springframework.domain.*;
 import guru.springframework.repositories.CategoryRepository;
 import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.repositories.UnitOfMeasureRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ import java.util.Optional;
  * @author igorg
  * Date 25.05.2022
  */
+@Slf4j
 @Component
 public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -34,6 +36,10 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         recipeRepository.saveAll(getRecipes());
+
+        if(log.isInfoEnabled()){
+            log.info("List of recipe saved ...");
+        }
     }
 
     public List<Recipe> getRecipes() {
@@ -42,30 +48,36 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         //get UOMs
         Optional<UnitOfMeasure> teaSpoonUomOptional = unitOfMeasureRepository.findByDescription("Teaspoon");
         if (!teaSpoonUomOptional.isPresent()) {
+            log.error("Expected UOM Not Found");
             throw new RuntimeException("Expected UOM Not Found");
         }
         Optional<UnitOfMeasure> tableSpoonUomOptional = unitOfMeasureRepository.findByDescription("Tablespoon");
         if (!tableSpoonUomOptional.isPresent()) {
+            log.error("Expected UOM Not Found");
             throw new RuntimeException("Expected UOM Not Found");
         }
 
         Optional<UnitOfMeasure> cupsUomOptional = unitOfMeasureRepository.findByDescription("Cup");
         if (!cupsUomOptional.isPresent()) {
+            log.error("Expected UOM Not Found");
             throw new RuntimeException("Expected UOM Not Found");
         }
 
         Optional<UnitOfMeasure> pinchUomOptional = unitOfMeasureRepository.findByDescription("Pinch");
         if (!pinchUomOptional.isPresent()) {
+            log.error("Expected UOM Not Found");
             throw new RuntimeException("Expected UOM Not Found");
         }
 
         Optional<UnitOfMeasure> ounceUomOptional = unitOfMeasureRepository.findByDescription("Ounce");
         if (!ounceUomOptional.isPresent()) {
+            log.error("Expected UOM Not Found");
             throw new RuntimeException("Expected UOM Not Found");
         }
 
         Optional<UnitOfMeasure> eachUomOptional = unitOfMeasureRepository.findByDescription("Each");
         if (!eachUomOptional.isPresent()) {
+            log.error("Expected UOM Not Found");
             throw new RuntimeException("Expected UOM Not Found");
         }
 
@@ -76,6 +88,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 
         Optional<UnitOfMeasure> pintUomOptional = unitOfMeasureRepository.findByDescription("Pint");
         if (!pintUomOptional.isPresent()) {
+            log.error("Expected UOM Not Found");
             throw new RuntimeException("Expected UOM Not Found");
         }
 
@@ -88,20 +101,29 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         UnitOfMeasure dashUom = dashUomOptional.get();
         UnitOfMeasure pintUom = pintUomOptional.get();
 
+        if(log.isInfoEnabled()){
+            log.info("UOM's loaded ...");
+        }
+
         //get Categories
         Optional<Category> americanCategoryOptional = categoryRepository.findByDescription("American");
         if (!americanCategoryOptional.isPresent()) {
+            log.error("Expected Category Not Found");
             throw new RuntimeException("Expected Category Not Found");
         }
 
         Optional<Category> mexicanCategoryOptional = categoryRepository.findByDescription("Mexican");
         if (!mexicanCategoryOptional.isPresent()) {
+            log.error("Expected Category Not Found");
             throw new RuntimeException("Expected Category Not Found");
         }
 
         Category americanCategory = americanCategoryOptional.get();
         Category mexicanCategory = mexicanCategoryOptional.get();
 
+        if(log.isInfoEnabled()){
+            log.info("Categories loaded ...");
+        }
 
         Recipe guacamole = new Recipe();
         guacamole.setCookTime(0);
@@ -142,7 +164,6 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
                 .addIngredient(new Ingredient("fresh lime or lemon juice", BigDecimal.valueOf(1), tableSpoonUom))
                 .addIngredient(new Ingredient("minced red onion or thinly sliced green onion", BigDecimal.valueOf(3), tableSpoonUom))
                 .addIngredient(new Ingredient("serrano (or jalapeño) chilis, stems and seeds removed, minced", BigDecimal.valueOf(2), eachUom))
-                .addIngredient(new Ingredient("serrano (or jalapeño) chilis, stems and seeds removed, minced", BigDecimal.valueOf(2), tableSpoonUom))
                 .addIngredient(new Ingredient("freshly ground black pepper", BigDecimal.valueOf(1), pinchUom))
                 .addIngredient(new Ingredient("ripe tomato, chopped (optional)", BigDecimal.valueOf(0.5), eachUom));
 
@@ -150,6 +171,10 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         guacamole.getCategories().add(mexicanCategory);
 
         recipes.add(guacamole);
+
+        if(log.isInfoEnabled()){
+            log.info("Recipe guacamole made ...");
+        }
 
         Recipe tacoChicken = new Recipe();
         tacoChicken.setCookTime(15);
@@ -202,6 +227,10 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         tacoChicken.getCategories().add(mexicanCategory);
 
         recipes.add(tacoChicken);
+
+        if(log.isInfoEnabled()){
+            log.info("Recipe taco chicken made ...");
+        }
 
         return recipes;
     }
