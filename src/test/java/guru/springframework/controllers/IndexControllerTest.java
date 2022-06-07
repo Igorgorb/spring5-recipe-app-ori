@@ -1,19 +1,16 @@
 package guru.springframework.controllers;
 
-import guru.springframework.domain.Category;
 import guru.springframework.domain.Recipe;
-import guru.springframework.domain.UnitOfMeasure;
-import guru.springframework.repositories.CategoryRepository;
-import guru.springframework.repositories.UnitOfMeasureRepository;
 import guru.springframework.services.RecipeService;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
 
 import java.util.HashSet;
-import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
@@ -25,13 +22,8 @@ import static org.mockito.Mockito.*;
 public class IndexControllerTest {
 
     IndexController indexController;
-
     @Mock
     RecipeService recipeService;
-    @Mock
-    CategoryRepository categoryRepository;
-    @Mock
-    UnitOfMeasureRepository unitOfMeasureRepository;
     @Mock
     Model model;
 
@@ -39,29 +31,34 @@ public class IndexControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        indexController = new IndexController(categoryRepository, unitOfMeasureRepository, recipeService);
+        indexController = new IndexController(recipeService);
     }
 
     @Test
     public void getIndexPage() {
+
+        //given
+        Set<Recipe> recipes = new HashSet<>();
+        recipes.add(new Recipe());
         Recipe recipe = new Recipe();
-        HashSet recipeData = new HashSet<>();
-        recipeData.add(recipe);
-        when(recipeService.findAll()).thenReturn(recipeData);
+        recipe.setId(1L);
+        recipes.add(recipe);
 
-        Optional<Category> categoryOptional = Optional.of(new Category());
-        when(categoryRepository.findByDescription("American")).thenReturn(categoryOptional);
+        when(recipeService.findAll()).thenReturn(recipes);
 
-        Optional<UnitOfMeasure> unitOfMeasureOptional = Optional.of(new UnitOfMeasure());
-        when(unitOfMeasureRepository.findByDescription("Teaspoon")).thenReturn(unitOfMeasureOptional);
+        ArgumentCaptor<Set<Recipe>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
 
+        //when
         String expected = "index";
         String actual = indexController.getIndexPage(model);
+
+        //then
         assertEquals(expected, actual);
 
         verify(recipeService, times(1)).findAll();
-        verify(categoryRepository, times(1)).findByDescription("American");
-        verify(unitOfMeasureRepository, times(1)).findByDescription("Teaspoon");
-        verify(model, times(1)).addAttribute("recipes", recipeData);
+//        verify(model, times(1)).addAttribute(eq("recipes"), anySet());
+        verify(model, times(1)).addAttribute(eq("recipes"), argumentCaptor.capture());
+        Set<Recipe> setInController = argumentCaptor.getValue();
+        assertEquals(2, setInController.size());
     }
 }
