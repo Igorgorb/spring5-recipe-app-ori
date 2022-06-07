@@ -31,14 +31,14 @@ public class RecipeServiceImplTest {
     }
 
     @Test
-    public void getRecipes() {
+    public void findAll() {
         Recipe recipe = new Recipe();
         HashSet recipeData = new HashSet<>();
         recipeData.add(recipe);
 
-        when(recipeService.getRecipes()).thenReturn(recipeData);
+        when(recipeService.findAll()).thenReturn(recipeData);
 
-        Set<Recipe> recipes = recipeService.getRecipes();
+        Set<Recipe> recipes = recipeService.findAll();
 
         assertEquals(recipes.size(), 1);
         Mockito.verify(recipeRepository, Mockito.times(1)).findAll();

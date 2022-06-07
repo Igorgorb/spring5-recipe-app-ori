@@ -41,7 +41,7 @@ public class IndexController {
             log.info("UOM Id is: {}", unitOfMeasureOptional.get().getId());
             log.info("Some message to say......jgcgj 43152");
         }
-        model.addAttribute("recipes", recipeService.getRecipes());
+        model.addAttribute("recipes", recipeService.findAll());
         return "index";
     }
 }
