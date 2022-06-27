@@ -152,7 +152,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
                 "Remember that much of this is done to taste because of the variability in the fresh ingredients. Start with this recipe and adjust to your taste.");
         guacamole.setServings(4);
         guacamole.setSource("Simply Recipes");
-        guacamole.setUrl("www.simplyrecipes.com/recipes/perfect_guacamole/");
+        guacamole.setUrl("https://www.simplyrecipes.com/recipes/perfect_guacamole/");
         guacamole.setDifficulty(Difficulty.EASY);
         Notes guacNotes = new Notes();
         guacNotes.setRecipeNotes("Once you have basic guacamole down, feel free to experiment with variations by adding strawberries, peaches, pineapple, mangoes, or even watermelon. One classic Mexican guacamole has pomegranate seeds and chunks of peaches in it (a Diana Kennedy favorite). You can get creative with your homemade guacamole!\n" +
@@ -184,7 +184,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         tacoChicken.setDescription("Spicy Grilled Chicken Tacos");
         tacoChicken.setServings(4);
         tacoChicken.setSource("Simply Recipes");
-        tacoChicken.setUrl("www.simplyrecipes.com/recipes/spicy_grilled_chicken_tacos/");
+        tacoChicken.setUrl("https://www.simplyrecipes.com/recipes/spicy_grilled_chicken_tacos/");
         tacoChicken.setDifficulty(Difficulty.MODERATE);
         tacoChicken.setDirections("1. Prepare a gas or charcoal grill for medium-high, direct heat\n" +
                 "2. Make the marinade and coat the chicken:\n" +
