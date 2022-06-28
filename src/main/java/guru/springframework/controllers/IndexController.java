@@ -25,6 +25,7 @@ public class IndexController {
         if (log.isInfoEnabled()) {
             log.info("Some message to say......jgcgj 43152");
         }
+        log.debug("Getting Index page");
 
         model.addAttribute("recipes", recipeService.findAll());
 
