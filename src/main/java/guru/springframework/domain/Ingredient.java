@@ -5,12 +5,15 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author igorg
- * Date 20.05.2022
+ * @date 20.05.2022
  */
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(exclude = {"recipe"})
 @Entity
 public class Ingredient {
