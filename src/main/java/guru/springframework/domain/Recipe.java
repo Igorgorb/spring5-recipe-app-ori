@@ -8,7 +8,7 @@ import java.util.Set;
 
 /**
  * @author igorg
- * Date 15.05.2022
+ * @date 15.05.2022
  */
 @Data
 @Entity

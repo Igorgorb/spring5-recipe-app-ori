@@ -17,9 +17,9 @@ import static org.mockito.Mockito.*;
 
 /**
  * @author igorg
- * Date 03.08.2022
+ * @date 03.08.2022
  */
-class UnitOfMeasureServiceImplTest {
+public class UnitOfMeasureServiceImplTest {
 
     UnitOfMeasureToUnitOfMeasureCommand unitOfMeasureToUnitOfMeasureCommand = new UnitOfMeasureToUnitOfMeasureCommand();
     UnitOfMeasureService service;
@@ -28,14 +28,14 @@ class UnitOfMeasureServiceImplTest {
     UnitOfMeasureRepository unitOfMeasureRepository;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
 
         service = new UnitOfMeasureServiceImpl(unitOfMeasureRepository, unitOfMeasureToUnitOfMeasureCommand);
     }
 
     @Test
-    void listAllUoms() throws Exception {
+    public void listAllUoms() throws Exception {
         //given
         Set<UnitOfMeasure> unitOfMeasures = new HashSet<>();
         UnitOfMeasure uom1 = new UnitOfMeasure();
@@ -54,7 +54,5 @@ class UnitOfMeasureServiceImplTest {
         //then
         assertEquals(2, commands.size());
         verify(unitOfMeasureRepository, times(1)).findAll();
-
-
     }
 }

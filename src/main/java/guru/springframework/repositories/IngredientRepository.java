@@ -10,7 +10,7 @@ import java.util.Set;
 
 /**
  * @author igorg
- * Date 24.05.2022
+ * @date 24.05.2022
  */
 public interface IngredientRepository extends CrudRepository<Ingredient, Long> {
     Set<Ingredient> findByRecipe(Recipe recipe);

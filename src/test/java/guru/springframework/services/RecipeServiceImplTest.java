@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 
 /**
  * @author igorg
- * Date 07.06.2022
+ * @date 07.06.2022
  */
 public class RecipeServiceImplTest {
     RecipeServiceImpl recipeService;

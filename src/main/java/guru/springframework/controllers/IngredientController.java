@@ -12,7 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * @author igorg Date 21.07.2022
+ * @author igorg 
+ * @date 21.07.2022
  */
 @Slf4j
 @Controller
@@ -52,7 +53,7 @@ public class IngredientController {
 
     RecipeCommand recipeCommand = recipeService.findCommandById(Long.valueOf(recipeId));
     // todo raise exception if null
-    
+
     //need to return back parent id for hidden form property
     IngredientCommand ingredientCommand = new IngredientCommand();
     ingredientCommand.setRecipeId(recipeCommand.getId());
@@ -72,6 +73,16 @@ public class IngredientController {
 
     model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
     return "recipe/ingredient/ingredientform";
+  }
+
+  @GetMapping
+  @RequestMapping("recipe/{recipeId}/ingredient/{ingredientId}/delete")
+  public String deleteIngredient(@PathVariable String recipeId, @PathVariable String ingredientId) {
+    ingredientService.deleteById(Long.valueOf(recipeId), Long.valueOf(ingredientId));
+
+    log.debug("Deleting ingredient id: " + ingredientId);
+
+    return "redirect:/recipe/" + recipeId + "/ingredients";
   }
 
   @PostMapping

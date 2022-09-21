@@ -15,7 +15,7 @@ import java.util.Set;
 
 /**
  * @author igorg
- * Date 22.05.2022
+ * @date 22.05.2022
  */
 @Slf4j
 @Service
@@ -32,7 +32,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Set<Recipe> findAll() {
-        log.debug("I'm in the service");
+        log.debug("I'm in the Recipe service");
         Set<Recipe> recipeSet = new HashSet<>();
         recipeRepository.findAll().iterator().forEachRemaining(recipeSet::add);
         return recipeSet;
