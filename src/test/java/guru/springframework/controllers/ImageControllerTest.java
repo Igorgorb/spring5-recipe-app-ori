@@ -56,7 +56,7 @@ public class ImageControllerTest {
     when(recipeService.findCommandById(anyLong())).thenReturn(command);
 
     //when
-    mockMvc.perform(get("recipe/1/image"))
+    mockMvc.perform(get("/recipe/1/image"))
       .andExpect(status().isOk())
       .andExpect(model().attributeExists("recipe"));
 
