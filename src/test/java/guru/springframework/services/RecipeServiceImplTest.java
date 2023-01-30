@@ -4,6 +4,7 @@ import guru.springframework.commands.RecipeCommand;
 import guru.springframework.converters.RecipeCommandToRecipe;
 import guru.springframework.converters.RecipeToRecipeCommand;
 import guru.springframework.domain.Recipe;
+import guru.springframework.exceptions.NotFoundException;
 import guru.springframework.repositories.RecipeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,88 +17,108 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 /**
  * @author igorg
  * @date 07.06.2022
  */
+@SpringBootTest(classes = {RecipeServiceImpl.class})
 public class RecipeServiceImplTest {
-    RecipeServiceImpl recipeService;
-    @Mock
-    RecipeRepository recipeRepository;
 
-    @Mock
-    RecipeToRecipeCommand recipeToRecipeCommand;
-    @Mock
-    RecipeCommandToRecipe recipeCommandToRecipe;
+  @Autowired
+  RecipeService recipeService;
+  @MockBean
+  RecipeRepository recipeRepository;
 
-    @BeforeEach
-    public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
+  @MockBean
+  RecipeToRecipeCommand recipeToRecipeCommand;
+  @MockBean
+  RecipeCommandToRecipe recipeCommandToRecipe;
 
-        recipeService = new RecipeServiceImpl(recipeRepository, recipeCommandToRecipe, recipeToRecipeCommand);
-    }
+//  @BeforeEach
+//  public void setUp() throws Exception {
+//    MockitoAnnotations.initMocks(this);
+//
+//    //recipeService = new RecipeServiceImpl(recipeRepository, recipeCommandToRecipe, recipeToRecipeCommand);
+//  }
 
-    @Test
-    public void getRecipesTest() throws Exception {
-        Recipe recipe = new Recipe();
-        HashSet recipeData = new HashSet<>();
-        recipeData.add(recipe);
+  @Test
+  public void getRecipesTest() throws Exception {
+    Recipe recipe = new Recipe();
+    HashSet recipeData = new HashSet<>();
+    recipeData.add(recipe);
 
-        when(recipeService.findAll()).thenReturn(recipeData);
+    when(recipeService.findAll()).thenReturn(recipeData);
 
-        Set<Recipe> recipes = recipeService.findAll();
+    Set<Recipe> recipes = recipeService.findAll();
 
-        assertEquals(recipes.size(), 1);
-        verify(recipeRepository, times(1)).findAll();
-    }
+    assertEquals(recipes.size(), 1);
+    verify(recipeRepository, times(1)).findAll();
+  }
 
-    @Test
-    public void getRecipeByIdTest() throws Exception {
-        Recipe recipe = new Recipe();
-        recipe.setId(1L);
-        Optional<Recipe> recipeOptional = Optional.of(recipe);
+  @Test
+  public void getRecipeByIdTest() throws Exception {
+    Recipe recipe = new Recipe();
+    recipe.setId(1L);
+    Optional<Recipe> recipeOptional = Optional.of(recipe);
 
-        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+    when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
 
-        Recipe recipeReturned = recipeService.findById(1L);
+    Recipe recipeReturned = recipeService.findById(1L);
 
-        assertNotNull(recipeReturned, "Null recipe returned");
-        verify(recipeRepository, times(1)).findById(anyLong());
-        verify(recipeRepository, never()).findAll();
-    }
+    assertNotNull(recipeReturned, "Null recipe returned");
+    verify(recipeRepository, times(1)).findById(anyLong());
+    verify(recipeRepository, never()).findAll();
+  }
 
-    @Test
-    public void getRecipeCommandByIdTest() throws Exception {
-        Recipe recipe = new Recipe();
-        recipe.setId(1L);
-        Optional<Recipe> recipeOptional = Optional.of(recipe);
+  @Test
+  public void getRecipeByIdTestNotFound() throws Exception {
+    Optional<Recipe> recipeOptional = Optional.empty();
 
-        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+    when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
 
-        RecipeCommand recipeCommand = new RecipeCommand();
-        recipeCommand.setId(1L);
+    assertThrows(NotFoundException.class, () -> {
+      Recipe recipeReturned = recipeService.findById(1L);
+    });
 
-        when(recipeToRecipeCommand.convert(any())).thenReturn(recipeCommand);
+    // should go boom
+  }
 
-        RecipeCommand commandById = recipeService.findCommandById(1L);
+  @Test
+  public void getRecipeCommandByIdTest() throws Exception {
+    Recipe recipe = new Recipe();
+    recipe.setId(1L);
+    Optional<Recipe> recipeOptional = Optional.of(recipe);
 
-        assertNotNull(commandById, "Null recipe returned");
-        verify(recipeRepository, times(1)).findById(anyLong());
-        verify(recipeRepository, never()).findAll();
-    }
+    when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
 
-    @Test
-    public void testDeleteById() throws Exception {
-        // given
-        Long idToDelete = 2L;
+    RecipeCommand recipeCommand = new RecipeCommand();
+    recipeCommand.setId(1L);
 
-        //when
-        recipeService.deleteById(idToDelete);
+    when(recipeToRecipeCommand.convert(any())).thenReturn(recipeCommand);
 
-        //then
-        verify(recipeRepository, times(1)).deleteById(anyLong());
-    }
+    RecipeCommand commandById = recipeService.findCommandById(1L);
+
+    assertNotNull(commandById, "Null recipe returned");
+    verify(recipeRepository, times(1)).findById(anyLong());
+    verify(recipeRepository, never()).findAll();
+  }
+
+  @Test
+  public void testDeleteById() throws Exception {
+    // given
+    Long idToDelete = 2L;
+
+    //when
+    recipeService.deleteById(idToDelete);
+
+    //then
+    verify(recipeRepository, times(1)).deleteById(anyLong());
+  }
 }
