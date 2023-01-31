@@ -2,7 +2,6 @@ package guru.springframework.controllers;
 
 import guru.springframework.commands.RecipeCommand;
 import guru.springframework.domain.Recipe;
-import guru.springframework.exceptions.BadRequestException;
 import guru.springframework.services.RecipeService;
 import guru.springframework.exceptions.NotFoundException;
 import org.junit.jupiter.api.Test;
@@ -64,10 +63,7 @@ public class RecipeControllerTest {
   }
 
   @Test
-  public void testGetRecipeBadRequest() throws Exception {
-
-    when(recipeService.findById(anyLong())).thenThrow(BadRequestException.class);
-
+  public void testGetRecipeNumberFormatException() throws Exception {
     mockMvc.perform(get("/recipe/jhvjv/show"))
       .andExpect(status().isBadRequest())
       .andExpect(view().name("400error"));
