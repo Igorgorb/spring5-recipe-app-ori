@@ -1,6 +1,7 @@
 package guru.springframework.controllers;
 
 import guru.springframework.commands.RecipeCommand;
+import guru.springframework.exceptions.BadRequestException;
 import guru.springframework.exceptions.NotFoundException;
 import guru.springframework.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +28,13 @@ public class RecipeController {
   @GetMapping
   @RequestMapping("/recipe/{id}/show")
   public String showById(@PathVariable String id, Model model) {
-    model.addAttribute("recipe", recipeService.findById(Long.valueOf(id)));
+    Long id_in;
+    try {
+      id_in = Long.valueOf(id);
+    } catch (NumberFormatException nfe) {
+      throw new BadRequestException("Url request contain incredible part: " + id);
+    }
+    model.addAttribute("recipe", recipeService.findById(id_in));
     return "recipe/show";
   }
 
@@ -72,6 +79,19 @@ public class RecipeController {
 
     ModelAndView modelAndView = new ModelAndView();
     modelAndView.setViewName("404error");
+    modelAndView.addObject("exception", exception);
+
+    return modelAndView;
+  }
+
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ExceptionHandler(BadRequestException.class)
+  public ModelAndView handleBadRequest(Exception exception) {
+    log.error("Handing bad request exception");
+    log.error(exception.getMessage());
+
+    ModelAndView modelAndView = new ModelAndView();
+    modelAndView.setViewName("400error");
     modelAndView.addObject("exception", exception);
 
     return modelAndView;
